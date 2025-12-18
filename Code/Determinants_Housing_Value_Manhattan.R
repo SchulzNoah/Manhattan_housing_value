@@ -1,21 +1,16 @@
-# Räumliche Statistik: Hauspreise in Boston --------------------
+# Räumliche Statistik: Hauspreise in Manhattan --------------------
 
 # Laden relevanter Packages -----------------------------------------------
 
-library(tidyverse)
-library(sf)
-library(tidycensus)
-library(tmap)
-library(openxlsx)
-library(spatialreg)
-library(spdep)
-library(car) 
-library(stargazer)
-
-# Setzen des Working Directories ------------------------------------------
-
-setwd("C:/Users/Noah/Desktop/Master/Räumliche Statistik/Leistungsnachweis/R-Codes")
-
+library(tidyverse)   # Data Cleaning
+library(sf)          # Arbeiten mit Geodaten
+library(tidycensus)  # Extraktion relevanter Daten
+library(tmap)        # Maps
+library(openxlsx)    # Export Excel
+library(spatialreg)  # Rechnen Spatial-Error- und Spatial-Lag-Modelle
+library(spdep)       # Nachbarschaftsmatrix
+library(car)         # Extraktion Varianzinflationsfaktoren
+library(stargazer)   # Regressionstabelle
 
 # Einlesen der Daten ------------------------------------------------------
 
@@ -62,7 +57,7 @@ ny_clean = ny %>%
 # Erstellung deskriptiver Karten ------------------------------------------
 
 
-# Median Wohnungspreis
+# Median Immobilienwert
 
 tm_shape(ny_clean)+
   tm_polygons(fill = "median_valueE",
@@ -118,7 +113,7 @@ tm_shape(ny_clean)+
     legend.title.size = 0.8, 
     legend.text.size  = 0.7)
 
-#  Anteil an dunkelhäutigen
+# Anteil an Dunkelhäutigen
 tm_shape(ny_clean)+
   tm_polygons(fill = "black_ratio",
               fill.legend = tm_legend("Anteil an dunkelhäu-\ntigen Personen (in %)"),
@@ -170,7 +165,6 @@ tm_shape(ny_clean)+
     legend.position = c("left", "top"),
     legend.title.size = 0.85, 
     legend.text.size  = 0.7)
-
 
 
 # Deskriptive Statistiken -------------------------------------------------
@@ -322,9 +316,7 @@ rs_table <- extract_rs(model_ols, ny_listw)
 write.xlsx(rs_table, "Tabellen/Lagrange_Multiplier_Test.xlsx")
 
 
-
 # Regressionstabelle ------------------------------------------------------
-
 
 
 # Hilfsfunktion für Signifikanzsterne
@@ -393,6 +385,7 @@ stargazer(model_ols, model_sar_err, model_sar_lag,
                            aic_line),
           decimal.mark = ",",
           digit.separator = ".")
+
 
 
 
